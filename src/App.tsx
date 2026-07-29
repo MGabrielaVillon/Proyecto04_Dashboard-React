@@ -1,43 +1,23 @@
-import { Grid, Paper, Typography } from '@mui/material'
 import './App.css'
 
 function App() {
   return (
-    <Grid container spacing={2} sx={{ padding: 3 }}>
-      <Grid item xs={12}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Bienvenido al Dashboard
-        </Typography>
-      </Grid>
+    <div className="App">
+      <header className="App-header">
+        <h1>Bienvenido al Dashboard</h1>
+        <p>Esta es la base del proyecto React con Vite.</p>
+      </header>
 
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>Elemento: Encabezado</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>Elemento: Alertas</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Paper sx={{ p: 2 }}>Elemento: Selector</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Paper sx={{ p: 2 }}>Elemento: Indicadores</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={4}>
-        <Paper sx={{ p: 2 }}>Elemento: Gráfico</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>Elemento: Tabla</Paper>
-      </Grid>
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>Elemento: Información adicional</Paper>
-      </Grid>
-    </Grid>
+      <section className="dashboard-grid">
+        <div className="dashboard-card">Encabezado</div>
+        <div className="dashboard-card">Alertas</div>
+        <div className="dashboard-card">Selector</div>
+        <div className="dashboard-card">Indicadores</div>
+        <div className="dashboard-card">Gráfico</div>
+        <div className="dashboard-card">Tabla</div>
+        <div className="dashboard-card">Información adicional</div>
+      </section>
+    </div>
   )
 }
 
