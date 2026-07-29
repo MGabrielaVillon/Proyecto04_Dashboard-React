@@ -1,24 +1,104 @@
 import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Bienvenido al Dashboard</h1>
-        <p>Esta es la base del proyecto React con Vite.</p>
-      </header>
+import { useState } from 'react';
+import HeaderUI from './components/HeaderUI';
+import AlertUI from './components/AlertUI';
+import SelectorUI from './components/SelectorUI';
+import IndicatorUI from './components/IndicatorUI';
+import useFetchData from './hooks/useFetchData';
+import TableUI from './components/TableUI';
+import ChartUI from './components/ChartUI';
+import { Grid } from '@mui/material';
 
-      <section className="dashboard-grid">
-        <div className="dashboard-card">Encabezado</div>
-        <div className="dashboard-card">Alertas</div>
-        <div className="dashboard-card">Selector</div>
-        <div className="dashboard-card">Indicadores</div>
-        <div className="dashboard-card">Gráfico</div>
-        <div className="dashboard-card">Tabla</div>
-        <div className="dashboard-card">Información adicional</div>
-      </section>
-    </div>
-  )
+function App() {
+   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+   // useFetchData devuelve data, loading y error según la ciudad seleccionada
+   const { data, loading, error } = useFetchData(selectedOption);
+
+   return (
+      <Grid container spacing={5} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+
+         {/* Encabezado */}
+         <Grid size={{ xs: 12 }}>
+            <HeaderUI />
+         </Grid>
+
+         {/* Alertas */}
+         <Grid size={{ xs: 12 }} container sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
+            <AlertUI description="No se preveen lluvias" />
+         </Grid>
+
+         {/* Selector */}
+         <Grid size={{ xs: 12, md: 3 }}>
+            <SelectorUI onOptionSelect={setSelectedOption} />
+         </Grid>
+
+         {/* Indicadores */}
+         <Grid size={{ xs: 12, md: 9 }} container spacing={3}>
+            {loading ? (
+               <Grid size={{ xs: 12 }}>
+                  <IndicatorUI
+                     title='Cargando datos'
+                     description='Espera mientras se obtiene la información del clima.'
+                  />
+               </Grid>
+            ) : error ? (
+               <Grid size={{ xs: 12 }}>
+                  <IndicatorUI
+                     title='Error al cargar datos'
+                     description={error}
+                  />
+               </Grid>
+            ) : data ? (
+               <>
+                  <Grid size={{ xs: 12, md: 3 }}>
+                     <IndicatorUI
+                        title='Temperatura (2m)'
+                        description={`${data.current.temperature_2m} ${data.current_units.temperature_2m}`}
+                     />
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 3 }}>
+                     <IndicatorUI
+                        title='Temperatura aparente'
+                        description={`${data.current.apparent_temperature} ${data.current_units.apparent_temperature}`}
+                     />
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 3 }}>
+                     <IndicatorUI
+                        title='Velocidad del viento'
+                        description={`${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`}
+                     />
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 3 }}>
+                     <IndicatorUI
+                        title='Humedad relativa'
+                        description={`${data.current.relative_humidity_2m} ${data.current_units.relative_humidity_2m}`}
+                     />
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>Indicadores</Grid>
+               </>
+            ) : null}
+         </Grid>
+
+         {/* Gráfico */}
+         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
+            <ChartUI hourly={data?.hourly ?? null} loading={loading} error={error} />
+         </Grid>
+
+         {/* Tabla */}
+         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
+            <TableUI hourly={data?.hourly ?? null} loading={loading} error={error} />
+         </Grid>
+
+         {/* Información adicional */}
+         <Grid size={{ xs: 12 }}>Información adicional</Grid>
+      </Grid>
+   );
 }
 
-export default App
+export default App;
+

@@ -1,36 +1,75 @@
-# Proyecto 04: Dashboard - React
+# React + TypeScript + Vite
 
-Este proyecto usa React + TypeScript + Vite y MUI para crear un dashboard básico.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Estructura del proyecto
+Currently, two official plugins are available:
 
-- `index.html`: punto de entrada del navegador. Carga el bundle generado por Vite y contiene el elemento `<div id="root"></div>` donde React monta la aplicación.
-- `src/main.tsx`: inicializa React y renderiza `<App />` dentro de `#root`.
-- `src/App.tsx`: define el componente principal de la aplicación. Aquí se construye la interfaz del dashboard con una estructura de cuadrícula de MUI.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Ramas del repositorio
+## React Compiler
 
-- `main`: debe contener solo `README.md` y `.gitignore` para mantener el repositorio limpio.
-- `develop`: contiene el código de desarrollo del proyecto React.
-- `gh-pages`: se usará para desplegar el sitio web en GitHub Pages.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Comandos principales
+## Expanding the ESLint configuration
 
-```bash
-npm install
-npm run dev
-npm run build
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+
 ```
 
-## Cómo funciona este proyecto
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-1. `npm create vite@latest . -- --template react-ts` genera la plantilla de React + TypeScript.
-2. `npm install` instala dependencias.
-3. `npm run dev` inicia el servidor de desarrollo.
-4. `src/App.tsx` se actualizó para mostrar un dashboard básico con `Grid` de MUI.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Detalle de componentes
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 
-- `Grid`: se utiliza como contenedor y para organizar secciones del dashboard.
-- `Paper`: envuelve cada área de contenido para producir una tarjeta visual.
-- `Typography`: muestra el título de bienvenida.
+```
