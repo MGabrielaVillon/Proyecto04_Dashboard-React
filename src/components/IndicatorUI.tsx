@@ -3,19 +3,19 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 interface IndicatorUIProps {
-    title?: string;
-    description?: string;
+    title: string;
+    value: string;
 }
 
 export default function IndicatorUI(props: IndicatorUIProps) {
     return (
         <Card>
             <CardContent sx={{ height: '100%' }}>
-                <Typography variant="h5" component="div">
-                    {props.description}
-                </Typography>
-                <Typography variant="body2" component="p" color="text.secondary">
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                     {props.title}
+                </Typography>
+                <Typography variant="h5" component="div">
+                    {props.value}
                 </Typography>
             </CardContent>
         </Card>

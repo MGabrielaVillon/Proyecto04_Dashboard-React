@@ -10,19 +10,18 @@ interface ChartUIProps {
   error: string | null;
 }
 
-// ChartUI usa los datos horarios de Open-Meteo para mostrar un gráfico lineal.
-// Si la API aún carga o hay un error, se muestra el estado correspondiente.
-
 export default function ChartUI({ hourly, loading, error }: ChartUIProps) {
   const maxPoints = 24;
   const labels = hourly?.time.slice(0, maxPoints) ?? [];
   const temperatureData = hourly?.temperature_2m.slice(0, maxPoints) ?? [];
   const windSpeedData = hourly?.wind_speed_10m.slice(0, maxPoints) ?? [];
+  const humidityData = hourly?.relative_humidity_2m.slice(0, maxPoints) ?? [];
+  const apparentTemperatureData = hourly?.apparent_temperature.slice(0, maxPoints) ?? [];
 
   return (
     <Box>
       <Typography variant="h5" component="div" sx={{ mb: 2 }}>
-        Temperatura y viento horario
+        Datos horarios
       </Typography>
 
       {error ? (
@@ -31,9 +30,11 @@ export default function ChartUI({ hourly, loading, error }: ChartUIProps) {
         <Typography>Cargando datos del gráfico...</Typography>
       ) : hourly && labels.length > 0 ? (
         <LineChart
-          height={320}
+          height={360}
           series={[
             { data: temperatureData, label: 'Temperatura 2m (°C)' },
+            { data: apparentTemperatureData, label: 'Temperatura aparente (°C)' },
+            { data: humidityData, label: 'Humedad (%)' },
             { data: windSpeedData, label: 'Viento 10m (m/s)' },
           ]}
           xAxis={[{ scaleType: 'point', data: labels, label: 'Hora' }]}

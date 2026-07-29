@@ -8,96 +8,95 @@ import IndicatorUI from './components/IndicatorUI';
 import useFetchData from './hooks/useFetchData';
 import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
-import { Grid } from '@mui/material';
+import { Grid, Card, Typography } from '@mui/material';
 
 function App() {
-   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-   // useFetchData devuelve data, loading y error según la ciudad seleccionada
-   const { data, loading, error } = useFetchData(selectedOption);
+  const { data, loading, error } = useFetchData(selectedOption);
 
-   return (
-      <Grid container spacing={5} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+  const indicatorCards = data ? [{
+        title: 'Temperatura 2m',
+        value: `${data.current.temperature_2m} ${data.current_units.temperature_2m}`,
+      },
+      {
+        title: 'Temperatura aparente',
+        value: `${data.current.apparent_temperature} ${data.current_units.apparent_temperature}`,
+      },
+      {
+        title: 'Humedad relativa',
+        value: `${data.current.relative_humidity_2m} ${data.current_units.relative_humidity_2m}`,
+      },
+      {
+        title: 'Velocidad del viento',
+        value: `${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`,
+      },
+      {
+        title: 'Hora actual',
+        value: data.current.time,
+      },
+    ]
+    : [];
 
-         {/* Encabezado */}
-         <Grid size={{ xs: 12 }}>
-            <HeaderUI />
-         </Grid>
+  return (
+    <Grid container spacing={4} sx={{ p: 3 }}>
 
-         {/* Alertas */}
-         <Grid size={{ xs: 12 }} container sx={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-            <AlertUI description="No se preveen lluvias" />
-         </Grid>
-
-         {/* Selector */}
-         <Grid size={{ xs: 12, md: 3 }}>
-            <SelectorUI onOptionSelect={setSelectedOption} />
-         </Grid>
-
-         {/* Indicadores */}
-         <Grid size={{ xs: 12, md: 9 }} container spacing={3}>
-            {loading ? (
-               <Grid size={{ xs: 12 }}>
-                  <IndicatorUI
-                     title='Cargando datos'
-                     description='Espera mientras se obtiene la información del clima.'
-                  />
-               </Grid>
-            ) : error ? (
-               <Grid size={{ xs: 12 }}>
-                  <IndicatorUI
-                     title='Error al cargar datos'
-                     description={error}
-                  />
-               </Grid>
-            ) : data ? (
-               <>
-                  <Grid size={{ xs: 12, md: 3 }}>
-                     <IndicatorUI
-                        title='Temperatura (2m)'
-                        description={`${data.current.temperature_2m} ${data.current_units.temperature_2m}`}
-                     />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, md: 3 }}>
-                     <IndicatorUI
-                        title='Temperatura aparente'
-                        description={`${data.current.apparent_temperature} ${data.current_units.apparent_temperature}`}
-                     />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, md: 3 }}>
-                     <IndicatorUI
-                        title='Velocidad del viento'
-                        description={`${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`}
-                     />
-                  </Grid>
-
-                  <Grid size={{ xs: 12, md: 3 }}>
-                     <IndicatorUI
-                        title='Humedad relativa'
-                        description={`${data.current.relative_humidity_2m} ${data.current_units.relative_humidity_2m}`}
-                     />
-                  </Grid>
-                  <Grid size={{ xs: 12 }}>Indicadores</Grid>
-               </>
-            ) : null}
-         </Grid>
-
-         {/* Gráfico */}
-         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
-            <ChartUI hourly={data?.hourly ?? null} loading={loading} error={error} />
-         </Grid>
-
-         {/* Tabla */}
-         <Grid size={{ xs: 12, md: 6 }} sx={{ display: { xs: 'none', md: 'block' } }}>
-            <TableUI hourly={data?.hourly ?? null} loading={loading} error={error} />
-         </Grid>
-
-         {/* Información adicional */}
-         <Grid size={{ xs: 12 }}>Información adicional</Grid>
+      <Grid size={{ xs: 12 }}>
+        <HeaderUI />
       </Grid>
-   );
+
+      <Grid size={{ xs: 12 }} container spacing={3} sx={{ alignItems: 'center' }}>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <SelectorUI onOptionSelect={setSelectedOption} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <AlertUI description="No se preveen lluvias" />
+        </Grid>
+      </Grid>
+
+      <Grid size={{ xs: 12 }}>
+        <Grid container spacing={3}>
+          {loading ? (
+            <Grid size={{ xs: 12 }}>
+              <IndicatorUI title="Cargando datos" value="Espera mientras se obtiene la información." />
+            </Grid>
+          ) : error ? (
+            <Grid size={{ xs: 12 }}>
+              <IndicatorUI title="Error al cargar datos" value={error} />
+            </Grid>
+          ) : (
+            indicatorCards.map((indicator) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={indicator.title}>
+                <IndicatorUI title={indicator.title} value={indicator.value} />
+              </Grid>
+            ))
+          )}
+        </Grid>
+      </Grid>
+
+      <Grid size={{ xs: 12 }} container spacing={3}>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <ChartUI hourly={data?.hourly ?? null} loading={loading} error={error} />
+        </Grid>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <TableUI hourly={data?.hourly ?? null} loading={loading} error={error} />
+        </Grid>
+      </Grid>
+
+      <Grid size={{ xs: 12 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card sx={{ p: 2 }}>
+              <Typography variant="h6">Información adicional</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                El dashboard utiliza datos de Open-Meteo en tiempo real y agrupa los principales indicadores climáticos.
+              </Typography>
+            </Card>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 }
 
 export default App;
