@@ -19,7 +19,7 @@ export default function ChartUI({ hourly, loading, error }: ChartUIProps) {
   const apparentTemperatureData = hourly?.apparent_temperature.slice(0, maxPoints) ?? [];
 
   return (
-    <Box>
+    <Box sx={{ backgroundColor: 'var(--panel-bg)', border: '1px solid var(--panel-border)', boxShadow: 'var(--panel-shadow)', borderRadius: 3, p: 2 }}>
       <Typography variant="h5" component="div" sx={{ mb: 2 }}>
         Datos horarios
       </Typography>
@@ -37,7 +37,42 @@ export default function ChartUI({ hourly, loading, error }: ChartUIProps) {
             { data: humidityData, label: 'Humedad (%)' },
             { data: windSpeedData, label: 'Viento 10m (m/s)' },
           ]}
-          xAxis={[{ scaleType: 'point', data: labels, label: 'Hora' }]}
+          grid={{ horizontal: true, vertical: false }}
+          xAxis={[
+            {
+              scaleType: 'point',
+              data: labels,
+              label: 'Hora',
+              tickLabelStyle: { fill: 'var(--panel-text)', opacity: 0.92, fontSize: 12 },
+              labelStyle: { fill: 'var(--panel-text)', opacity: 0.96 },
+              slotProps: {
+                axisLine: { stroke: 'rgba(148, 163, 184, 0.7)', strokeWidth: 1 },
+                axisTick: { stroke: 'rgba(148, 163, 184, 0.7)', strokeWidth: 1 },
+              },
+            },
+          ]}
+          yAxis={[
+            {
+              label: 'Valor',
+              tickLabelStyle: { fill: 'var(--panel-text)', opacity: 0.92, fontSize: 12 },
+              labelStyle: { fill: 'var(--panel-text)', opacity: 0.96 },
+              slotProps: {
+                axisLine: { stroke: 'rgba(148, 163, 184, 0.7)', strokeWidth: 1 },
+                axisTick: { stroke: 'rgba(148, 163, 184, 0.7)', strokeWidth: 1 },
+              },
+            },
+          ]}
+          hideLegend={false}
+          slotProps={{
+            legend: {
+              sx: { color: 'var(--panel-text)' },
+            },
+            tooltip: {
+              trigger: 'axis',
+              anchor: 'pointer',
+              position: 'top',
+            },
+          }}
         />
       ) : (
         <Typography>No hay datos suficientes para generar el gráfico.</Typography>

@@ -86,7 +86,7 @@ function App() {
       <Grid size={{ xs: 12 }}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ p: 2 }}>
+            <Card sx={{ p: 2, backgroundColor: 'var(--panel-bg)', border: '1px solid var(--panel-border)', boxShadow: 'var(--panel-shadow)' }}>
               <Typography variant="h6">Información adicional</Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 El dashboard utiliza datos de Open-Meteo en tiempo real y agrupa los principales indicadores climáticos.

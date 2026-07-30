@@ -9,7 +9,7 @@ interface IndicatorUIProps {
 
 export default function IndicatorUI(props: IndicatorUIProps) {
     return (
-        <Card>
+        <Card sx={{ backgroundColor: 'var(--panel-bg)', border: '1px solid var(--panel-border)', boxShadow: 'var(--panel-shadow)', borderRadius: 3 }}>
             <CardContent sx={{ height: '100%' }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                     {props.title}

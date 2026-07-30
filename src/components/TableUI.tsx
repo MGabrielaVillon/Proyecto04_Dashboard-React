@@ -52,7 +52,7 @@ export default function TableUI({ hourly, loading, error }: TableUIProps) {
   const rows = hourly ? buildRows(hourly) : [];
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', backgroundColor: 'var(--panel-bg)', border: '1px solid var(--panel-border)', boxShadow: 'var(--panel-shadow)', borderRadius: 3, p: 2 }}>
       <Typography variant="h6" gutterBottom>
         Datos horarios de Open-Meteo
       </Typography>
@@ -60,6 +60,30 @@ export default function TableUI({ hourly, loading, error }: TableUIProps) {
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <DataGrid
+        sx={{
+          backgroundColor: 'var(--data-grid-bg)',
+          borderRadius: 2,
+          border: '1px solid var(--panel-border)',
+          '& .MuiDataGrid-main': { backgroundColor: 'transparent' },
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: 'var(--data-grid-header)',
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            color: '#000000',
+          },
+          '& .MuiDataGrid-virtualScroller': { backgroundColor: 'transparent' },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: 'rgba(148, 163, 184, 0.12) !important',
+          },
+          '& .MuiDataGrid-cell': {
+            color: 'var(--panel-text)',
+            backgroundColor: 'transparent',
+          },
+          '& .MuiDataGrid-footerContainer': {
+            backgroundColor: 'transparent',
+            color: 'var(--panel-text-secondary)',
+          },
+        }}
         rows={rows}
         columns={columns}
         loading={loading}

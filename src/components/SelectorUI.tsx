@@ -22,7 +22,19 @@ export default function SelectorUI({ onOptionSelect }: SelectorProps) {
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl
+      fullWidth
+      sx={{
+        backgroundColor: 'var(--panel-bg)',
+        border: '1px solid var(--panel-border)',
+        borderRadius: 2,
+        p: 1,
+        '& .MuiInputLabel-root': { color: 'var(--panel-text)' },
+        '& .MuiSelect-select': { color: 'var(--panel-text)' },
+        '& .MuiSvgIcon-root': { color: 'var(--panel-text)' },
+        '& .MuiMenuItem-root': { color: 'var(--panel-text)' },
+      }}
+    >
       <InputLabel id="city-select-label">Ciudad</InputLabel>
       <Select
         labelId="city-select-label"
